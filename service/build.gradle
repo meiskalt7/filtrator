@@ -1,0 +1,151 @@
+archivesBaseName = 'meiskalt7-filtrator'
+group = parent.group
+version = parent.version
+
+apply plugin: 'org.springframework.boot'
+
+springBoot {
+    mainClass = "${servicePackage}.ServiceApplication"
+}
+
+ext {
+    ver = [
+            springBoot                  : '1.5.10.RELEASE',
+            springCloud                 : 'Edgware.RELEASE',
+
+            slf4j                       : '1.7.25',
+            commonsLang                 : '3.8.1',
+            fluent                      : '0.3.3',
+            powermock                   : '2.0.0',
+            junitJupiter                : '5.3.1',
+            mockito                     : '2.16.0',
+
+
+            lombok                      : '1.18.2',
+            keyCloak                    : '4.5.0.Final',
+            logbackMoreAppenders        : '1.4.3',
+            javaxValidation             : '2.0.1.Final',
+            hibernateValidator          : '6.0.13.Final',
+            jackson                     : '2.9.7'
+    ]
+}
+
+dependencyManagement {
+    resolutionStrategy {
+        cacheDynamicVersionsFor 5, 'minutes'
+        cacheChangingModulesFor 0, 'minutes'
+    }
+
+    imports {
+        mavenBom "org.springframework.boot:spring-boot-dependencies:$ver.springBoot"
+        mavenBom "org.springframework.cloud:spring-cloud-dependencies:$ver.springCloud"
+    }
+
+    dependencies {
+        dependency "org.springframework.boot:spring-boot-starter-parent:$ver.springBoot"
+
+        dependency "org.projectlombok:lombok:$ver.lombok"
+
+        dependency "org.fluentd:fluent-logger:$ver.fluent"
+
+        dependency "org.apache.commons:commons-lang3:$ver.commonsLang"
+        dependency "com.sndyuk:logback-more-appenders:$ver.logbackMoreAppenders"
+
+        dependency "org.keycloak:keycloak-spring-boot-starter:$ver.keyCloak"
+
+        dependency "org.hibernate:hibernate-validator:$ver.hibernateValidator"
+        dependency "javax.validation:validation-api:$ver.javaxValidation"
+
+        dependencySet(group: 'org.junit.jupiter', version: ver.slf4j) {
+            entry 'slf4j-api'
+            entry 'jcl-over-slf4j'
+        }
+
+        // Json
+        dependencySet(group: 'com.fasterxml.jackson.core', version: ver.jackson) {
+            entry 'jackson-core'
+            entry 'jackson-databind'
+            entry 'jackson-annotations'
+        }
+        dependencySet(group: 'com.fasterxml.jackson.dataformat', version: ver.jackson) {
+            entry 'jackson-dataformat-xml'
+            entry 'jackson-dataformat-yaml'
+        }
+        dependencySet(group: 'com.fasterxml.jackson.datatype', version: ver.jackson) {
+            entry 'jackson-datatype-joda'
+            entry 'jackson-datatype-jdk8'
+            entry 'jackson-datatype-jsr310'
+        }
+
+        dependencySet(group: 'org.powermock', version: ver.powermock) {
+            entry 'powermock-module-junit4'
+            entry 'powermock-api-mockito2'
+        }
+
+        dependency "org.mockito:mockito-core:$ver.mockito"
+
+        // JUnit5
+        dependencySet(group: 'org.junit.jupiter', version: ver.junitJupiter) {
+            entry 'junit-jupiter-api'
+            entry 'junit-jupiter-engine'
+            entry 'junit-jupiter-params'
+            entry 'junit-jupiter-migrationsupport'
+        }
+    }
+}
+
+dependencies {
+
+
+
+    compile "org.springframework.boot:spring-boot-starter-undertow",
+            "org.springframework.boot:spring-boot-starter-actuator",
+            "org.springframework.cloud:spring-cloud-starter-hystrix",
+            "org.springframework.cloud:spring-cloud-starter-eureka",
+            "org.springframework.cloud:spring-cloud-starter-netflix-zuul",
+            "org.springframework.cloud:spring-cloud-starter-config",
+            "org.springframework.cloud:spring-cloud-starter-stream-rabbit",
+            "org.springframework.cloud:spring-cloud-starter-bus-amqp",
+            "org.springframework.cloud:spring-cloud-stream",
+            "commons-collections:commons-collections",
+            "com.fasterxml.jackson.core:jackson-annotations",
+            "com.fasterxml.jackson.core:jackson-databind",
+            "com.fasterxml.jackson.core:jackson-core",
+            "com.fasterxml.jackson.datatype:jackson-datatype-jsr310",
+            "org.keycloak:keycloak-spring-boot-starter",
+            "org.apache.commons:commons-lang3",
+            "org.slf4j:slf4j-api",
+            "org.slf4j:jcl-over-slf4j",
+            "ch.qos.logback:logback-classic",
+            "org.fluentd:fluent-logger",
+            "com.sndyuk:logback-more-appenders",
+            "javax.validation:validation-api",
+            "com.jayway.jsonpath:json-path"
+
+    compileOnly "org.springframework.boot:spring-boot-configuration-processor",
+            "org.projectlombok:lombok"
+
+    testCompile "org.springframework.boot:spring-boot-starter-test",
+            "org.springframework.cloud:spring-cloud-stream-test-support",
+            "com.h2database:h2",
+            "org.mockito:mockito-core",
+            "org.powermock:powermock-module-junit4",
+            "org.powermock:powermock-api-mockito2",
+            "io.github.openfeign:feign-jackson",
+            "org.junit.jupiter:junit-jupiter-api",
+            "org.junit.jupiter:junit-jupiter-params"
+
+    testCompileOnly "org.projectlombok:lombok"
+
+    testRuntime "org.junit.jupiter:junit-jupiter-engine"
+
+}
+
+configurations.all {
+    all*.exclude group: "commons-logging", module: "commons-logging"
+    all*.exclude group: "log4j"
+    all*.exclude group: "org.apache.logging.log4j"
+    all*.exclude group: "org.slf4j", module: "slf4j-log4j12"
+    all*.exclude group: "org.slf4j", module: "slf4j-simple"
+    all*.exclude group: "org.springframework.boot", module: "spring-boot-starter-tomcat"
+}

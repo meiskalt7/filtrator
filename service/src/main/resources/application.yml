@@ -1,0 +1,135 @@
+info:
+  version: 1.0
+  description: Filtrator API
+
+app:
+  microservices-for-client-filtration: ${filtrator.microservices-for-client-filtration}
+  microservices-for-login-filtration: ${filtrator.microservices-for-login-filtration}
+  allowed-logins: ${filtrator.allowed-logins}
+
+eureka:
+  client:
+    enabled: true
+    register-with-eureka: true
+    fetch-registry: true
+    healthcheck:
+      enabled: true
+    region: default
+    service-url:
+      defaultZone: http://${discovery.host:localhost}:${discovery.port:8761}/eureka/
+    availability-zones:
+      default: defaultZone
+  instance:
+    hostname: ${spring.application.name}
+    prefer-ip-address: true
+    lease-expiration-duration-in-seconds: 60
+    lease-renewal-interval-in-seconds: 30
+    secure-port-enabled: false
+    non-secure-port-enabled: true
+    metadataMap:
+      management.context-path: ${server.context-path}${management.context-path}
+      management.port: ${management.port}
+      instanceId: ${spring.application.name}:${random.value}
+    home-page-url: http://${eureka.instance.hostname}:${management.port}/
+    status-page-url-path: ${server.context-path}${management.context-path}/info
+    health-check-url-path: ${server.context-path}${management.context-path}/health
+
+management:
+  port: ${server.port}
+  security:
+    enabled: false
+  context-path: /manage
+
+encrypt:
+  fail-on-error: false
+
+server:
+  port: ${spring.application.port:9993}
+  context-path:
+  use-forward-headers: true
+  session:
+    cookie:
+      name: JSESSIONIDFILTRATORSRV
+
+logging:
+  pattern:
+    console: "%d{yyyy-MM-dd HH:mm:ss.SSS} %clr(${LOG_LEVEL_PATTERN:%5p}) %clr([${spring.application.name:-},%X{X-B3-TraceId:-},%X{X-B3-SpanId:-},%X{X-Span-Export:-}]){yellow} %clr(${PID:- }){magenta} %clr([%t]){faint} %clr(%logger{25}){cyan} %clr(:){faint} %m%n${LOG_EXCEPTION_CONVERSION_WORD:-%wEx}"
+
+keycloak:
+  enabled: true
+  auth-server-url: ${keycloakAuth.authServerUrl:https://auth.url.ru/auth}
+  realm: ${keycloakAuth.realm:myRealm}
+  resource: ${spring.application.name}
+  bearer-only: true
+  security-constraints:
+    - auth-roles:
+        ${keycloakAuth.roles}
+      security-collections:
+        - name: meiskalt7-service
+          patterns:
+            - /meiskalt7-service/*
+spring:
+  cloud:
+    stream:
+      default-binder: springCloudBus
+      binders:
+        springCloudBus:
+          type: rabbit
+          environment:
+            spring:
+              rabbitmq:
+                host: ${rabbitmq.host:localhost}
+                port: ${rabbitmq.port:5672}
+                username: ${rabbitmq.username:guest}
+                password: ${rabbitmq.password:guest}
+  jackson:
+    default-property-inclusion: non_default
+    mapper:
+      auto_detect_creators: false
+      auto_detect_setters: false
+      auto_detect_getters: false
+      auto_detect_is_getters: false
+      accept_case_insensitive_properties: true
+      accept_case_insensitive_enums: true
+    deserialization:
+      fail_on_unknown_properties: false
+    parser:
+      allow_backslash_escaping_any_character: true
+    property-naming-strategy: LOWER_CAMEL_CASE
+    locale: ru_RU
+  messages:
+    basename: messages,apidoc,ValidationMessages
+  autoconfigure:
+    exclude:
+      - org.springframework.boot.autoconfigure.amqp.RabbitAutoConfiguration
+  mandatory-file-encoding: UTF-8
+  mvc:
+    locale: ru_RU
+  main:
+    banner-mode: 'CONSOLE'
+
+endpoints:
+  bus:
+    enabled: true
+  jmx:
+    enabled: false
+  liquibase:
+    enabled: false
+  jolokia:
+    enabled: false
+zuul:
+  routes:
+    service: #http://localhost:9993/meiskalt7-service/service/client/k-123456?reqId=asdf
+      service-id: meiskalt7-service
+      path: /meiskalt7-service/**
+      sensitiveHeaders:
+ribbon:
+  ReadTimeout: ${ribbonTimeout.read}
+  ConnectTimeout: ${ribbonTimeout.connect}
+
+hystrix:
+  command:
+    default:
+      execution:
+        timeout:
+          enabled: false

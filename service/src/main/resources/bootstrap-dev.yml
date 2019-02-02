@@ -1,0 +1,37 @@
+discovery:
+  host: localhost
+  port: 8761
+
+fluent:
+  host: localhost
+  port: 24224
+
+config:
+  host: config-service.local
+  port: 8008
+
+rabbitmq:
+  host: localhost
+  port: 5672
+  username: guest
+  password: guest
+
+keycloakAuth:
+  authServerUrl: https://auth.url.ru/auth
+  realm: myRealm
+  roles: admin, tester
+
+spring:
+  application:
+    name: meiskalt7-filtrator
+    port: 9993
+    index: ${random.value}
+  cloud:
+    config:
+      enabled: false
+      discovery:
+        enabled: false
+
+ribbonTimeout:
+  read: 10000
+  connect: 10000

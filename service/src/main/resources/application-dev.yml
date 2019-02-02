@@ -1,0 +1,27 @@
+app:
+  microservices-for-client-filtration: meiskalt7-service
+  microservices-for-login-filtration: meiskalt7-service
+  allowed-logins: k-123456, k-255616
+  swagger:
+    enabled: true
+
+eureka:
+  client:
+    enabled: true
+
+keycloak:
+  enabled: false #todo fix that
+  #proxy-url: #type here proxy-url
+
+hystrix:
+  metrics:
+    enabled: false
+
+logging:
+  pattern:
+    console: "%d{HH:mm:ss.SSS} %clr(%-5level) [%thread] %logger{25} [%file:%line] %msg%n"
+
+spring:
+  cloud:
+    bus:
+      enabled: false

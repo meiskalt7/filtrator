@@ -1,0 +1,56 @@
+filtrator:
+  microservices-for-client-filtration: ${microservices_for_client_filtration}
+  microservices-for-login-filtration: ${microservices_for_login_filtration}
+  allowed-logins: ${allowed_logins}
+
+discovery:
+  host: ${discovery_host}
+  port: ${discovery_port}
+
+fluent:
+  host: ${fluent_host}
+  port: ${fluent_port}
+
+config:
+  host: ${config_host}
+  port: ${config_port}
+
+rabbitmq:
+  host: ${rabbitmq_host}
+  port: ${rabbitmq_port}
+  username: ${rabbitmq_user_name}
+  password: ${rabbitmq_user_password}
+
+keycloakAuth:
+  authServerUrl: ${keycloak_auth_server_url}
+  realm: ${keycloak_realm}
+  roles: ${keycloak_roles}
+
+spring:
+  application:
+    name: meiskalt7-filtrator
+    port: ${application_port}
+    index: ${random.value}
+  cloud:
+    inetutils:
+      preferred-networks:
+        - 10.0
+      ignored-interfaces:
+        - eth2
+        - eth2@*
+    config:
+      enabled: false
+      uri: http://${config.host:config-service.local}:${config.port:8888}
+      failFast: true
+      overrideSystemProperties: true
+      overrideNone: false
+      retry:
+        initialInterval: 3000
+        maxAttempts: 100
+      discovery:
+        enabled: false
+        service-id: config-service
+
+ribbonTimeout:
+  read: ${ribbon_read_timeout}
+  connect: ${ribbon_connect_timeout}

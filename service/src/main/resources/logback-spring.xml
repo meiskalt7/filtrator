@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<configuration scan="true" scanPeriod="30 seconds">
+
+    <include resource="org/springframework/boot/logging/logback/base.xml" />
+
+    <springProperty scope="context" name="appName" source="spring.application.name" />
+    <springProperty scope="context" name="fluentHost" source="app.fluentHost" defaultValue="fluentd-aggregator.platform" />
+    <springProperty scope="context" name="fluentPort" source="app.fluentPort" defaultValue="24224" />
+
+    <logger name="sun" level="warn" />
+    <logger name="org.xnio" level="warn" />
+    <logger name="org.apache" level="warn" />
+    <logger name="io.undertow" level="warn" />
+    <logger name="com.netflix" level="warn" />
+    <logger name="com.sun.jersey" level="warn" />
+    <logger name="org.springframework" level="info" />
+    <logger name="springfox" level="info" />
+    <logger name="net.spy" level="info" />
+    <logger name="com.fasterxml.jackson.databind.introspect.POJOPropertyBuilder" level="info" />
+
+    <springProfile name="default">
+
+        <appender name="FLUENT" class="ch.qos.logback.more.appenders.DataFluentAppender">
+            <tag>${appName}</tag>
+            <remoteHost>${fluentHost}</remoteHost>
+            <port>${fluentPort}</port>
+        </appender>
+
+        <root level="info">
+            <appender-ref ref="FLUENT" />
+        </root>
+
+    </springProfile>
+
+    <springProfile name="dev">
+        <root level="debug">
+        </root>
+    </springProfile>
+
+</configuration>
