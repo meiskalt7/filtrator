@@ -10,23 +10,24 @@ springBoot {
 
 ext {
     ver = [
-            springBoot                  : '1.5.10.RELEASE',
-            springCloud                 : 'Edgware.RELEASE',
+            springBoot          : '1.5.10.RELEASE',
+            springCloud         : 'Edgware.RELEASE',
 
-            slf4j                       : '1.7.25',
-            commonsLang                 : '3.8.1',
-            fluent                      : '0.3.3',
-            powermock                   : '2.0.0',
-            junitJupiter                : '5.3.1',
-            mockito                     : '2.16.0',
+            slf4j               : '1.7.25',
+            commonsLang         : '3.8.1',
+            commonsIo           : '2.6',
+            fluent              : '0.3.3',
+            powermock           : '2.0.0',
+            junitJupiter        : '5.3.1',
+            mockito             : '2.16.0',
 
 
-            lombok                      : '1.18.2',
-            keyCloak                    : '4.5.0.Final',
-            logbackMoreAppenders        : '1.4.3',
-            javaxValidation             : '2.0.1.Final',
-            hibernateValidator          : '6.0.13.Final',
-            jackson                     : '2.9.7'
+            lombok              : '1.18.2',
+            keyCloak            : '4.5.0.Final',
+            logbackMoreAppenders: '1.4.3',
+            javaxValidation     : '2.0.1.Final',
+            hibernateValidator  : '6.0.13.Final',
+            jackson             : '2.9.7'
     ]
 }
 
@@ -49,6 +50,8 @@ dependencyManagement {
         dependency "org.fluentd:fluent-logger:$ver.fluent"
 
         dependency "org.apache.commons:commons-lang3:$ver.commonsLang"
+        dependency "commons-io:commons-io:$ver.commonsIo"
+
         dependency "com.sndyuk:logback-more-appenders:$ver.logbackMoreAppenders"
 
         dependency "org.keycloak:keycloak-spring-boot-starter:$ver.keyCloak"
@@ -97,7 +100,6 @@ dependencyManagement {
 dependencies {
 
 
-
     compile "org.springframework.boot:spring-boot-starter-undertow",
             "org.springframework.boot:spring-boot-starter-actuator",
             "org.springframework.cloud:spring-cloud-starter-hystrix",
@@ -108,6 +110,7 @@ dependencies {
             "org.springframework.cloud:spring-cloud-starter-bus-amqp",
             "org.springframework.cloud:spring-cloud-stream",
             "commons-collections:commons-collections",
+            "commons-io:commons-io",
             "com.fasterxml.jackson.core:jackson-annotations",
             "com.fasterxml.jackson.core:jackson-databind",
             "com.fasterxml.jackson.core:jackson-core",

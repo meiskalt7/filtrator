@@ -13,18 +13,23 @@ buildscript {
                 springBoot          : '1.5.10.RELEASE',
                 dependencyManagement: '1.0.4.RELEASE',
                 sonarqube           : '2.6.2',
+                lombok              : '3.6.4'
         ]
     }
 
     repositories {
         mavenCentral()
+        maven {
+            url "https://plugins.gradle.org/m2/"
+        }
     }
 
     dependencies {
         classpath "org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}",
                 "io.spring.gradle:dependency-management-plugin:$ver.dependencyManagement",
                 "org.springframework.boot:spring-boot-gradle-plugin:$ver.springBoot",
-                "org.sonarsource.scanner.gradle:sonarqube-gradle-plugin:$ver.sonarqube"
+                "org.sonarsource.scanner.gradle:sonarqube-gradle-plugin:$ver.sonarqube",
+                "io.freefair.gradle:lombok-plugin:$ver.lombok"
     }
 }
 
@@ -53,6 +58,7 @@ subprojects {
 
     apply plugin: 'java'
     apply plugin: 'io.spring.dependency-management'
+    apply plugin: "io.freefair.lombok"
 
     sourceCompatibility = '1.8'
     targetCompatibility = '1.8'
